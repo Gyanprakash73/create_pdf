@@ -8,6 +8,8 @@ import 'package:flutter/services.dart' show rootBundle;
 
 Future<Uint8List> makePdf(List<userModal?>? invoice) async {
   final pdf = Document();
+  int index = 0;
+
   pdf.addPage(
     MultiPage(
       build: (context) => <Widget>[
@@ -75,13 +77,19 @@ Future<Uint8List> makePdf(List<userModal?>? invoice) async {
               ],
             ),
             ...invoice!.map(
-              (e) => Row(
+              (e)  {
+                ++index;
+                return Column(children: [
+                Container(
+                  color: index%2==0? PdfColors.grey200:PdfColors.white,
+                  child: Row(
                 children: [
-                  Container(height: 75),
+                  Container(height: 50),
                   Expanded(
                     child: Text("${e?.id}", style: TextStyle(fontSize: 10)),
                     flex: 1,
                   ),
+                  
                   Expanded(
                     child:
                         Text("${e?.name}", style: TextStyle(fontSize: 10)),
@@ -105,6 +113,8 @@ Future<Uint8List> makePdf(List<userModal?>? invoice) async {
                 ],
               ),
             ),
+                Divider(height: 1,thickness: 1,color: PdfColors.grey800),
+              ],);}),
           ],
         )
       ],
